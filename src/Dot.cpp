@@ -38,7 +38,7 @@ void Dot::handleEvent( SDL_Event& e )
             // case SDLK_DOWN: mVelY += DOT_VEL; break;
             // case SDLK_LEFT: mVelX -= DOT_VEL; break;
             // case SDLK_RIGHT: mVelX += DOT_VEL; break;
-            case SDLK_SPACE:  mVelY = -200; break;
+            case SDLK_SPACE:  mVelY = -250; break;
         }
     }
     //If a key was released
@@ -189,7 +189,7 @@ void Enfants(std::vector<Dot>& birds) {
   std::random_device rd;
   std::mt19937 gen(rd());
   std::normal_distribution<double> d{1, 0.06};
-  for (int i = 2; i < (birds.size()-2)/2 ; ++i) { //TODO change i in a normal way
+  for (int i = birds.size()/5; i < (birds.size()-(birds.size()/5))/2 ; ++i) { //TODO change i in a normal way
     for (int j = 0; j < birds[i].number_of_neurons; ++j) {
       birds[i].weights_before_relu[j][0] = d(gen) * birds[0].weights_before_relu[j][0];
       birds[i].weights_before_relu[j][1] = d(gen) * birds[0].weights_before_relu[j][1];
@@ -197,7 +197,7 @@ void Enfants(std::vector<Dot>& birds) {
       birds[i].weights_after_relu[j] = d(gen) * birds[0].weights_after_relu[j];
     }
   }
-  for (int i = (birds.size()-2)/2; i < birds.size(); ++i) { 
+  for (int i = (birds.size()-(birds.size()/5))/2; i < birds.size(); ++i) { 
     for (int j = 0; j < birds[i].number_of_neurons; ++j) {
       birds[i].weights_before_relu[j][0] = d(gen) * birds[1].weights_before_relu[j][0];
       birds[i].weights_before_relu[j][1] = d(gen) * birds[1].weights_before_relu[j][1];

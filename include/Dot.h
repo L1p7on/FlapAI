@@ -41,7 +41,7 @@ class Dot
 
     int length_path = 0;
 
-    int number_of_neurons = 4;
+    int number_of_neurons = 6;
 
     std::vector<std::vector<double> > weights_before_relu;
 

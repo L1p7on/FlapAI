@@ -9,6 +9,7 @@ Obstacle::Obstacle() {
   bottom.h = 100;
   top.h = 100;
   x_vel = 1;
+  y_vel = 1;
   counted = false;
   center = (bottom.y+top.h)/2;
   r = 0;
@@ -26,6 +27,7 @@ Obstacle::Obstacle(int r_bot_h, int r_top_h, int top_x, int bot_x) {
   bottom.h = r_bot_h;
   top.h = r_top_h;
   x_vel = 1;
+  y_vel = 1;
   counted = false;
   center = (bottom.y + top.h)/2;
   r = 0;
@@ -36,6 +38,15 @@ Obstacle::Obstacle(int r_bot_h, int r_top_h, int top_x, int bot_x) {
 void Obstacle::move() {
   top.x -= x_vel;
   bottom.x -= x_vel;
+  if (top.h < 100) {
+    y_vel *= -1;
+  } else if (bottom.h < 100) {
+    y_vel *= -1;
+  }
+  top.h += y_vel;
+  bottom.h -= y_vel;
+  bottom.y = SCREEN_HEIGHT-bottom.h;
+  center = (bottom.y+top.h)/2;
 }
 
 void Obstacle::reset() {

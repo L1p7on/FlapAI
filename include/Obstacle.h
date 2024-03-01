@@ -20,6 +20,7 @@ class Obstacle {
 
  private:
   int x_vel;
+  int y_vel;
   int r, g, b;
 };
 #endif  // OBSTACLE_H_
