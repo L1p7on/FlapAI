@@ -79,3 +79,10 @@ void Obstacle::render() {
 int Obstacle::GetVel() {
   return x_vel;
 }
+
+bool Obstacle::GoingUp() const {
+  if (y_vel < 0) {
+    return true;
+  }
+  return false;
+}

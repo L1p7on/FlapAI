@@ -1,6 +1,6 @@
 #include "../include/Dot.h"
 Dot::Dot() :
-weights_before_relu(number_of_neurons,std::vector<double>(3,0.0)),
+weights_before_relu(number_of_neurons,std::vector<double>(4,0.0)),
 weights_after_relu(number_of_neurons, 0),
 auxiliary_matrix(number_of_neurons, 0)
 {
@@ -22,6 +22,7 @@ auxiliary_matrix(number_of_neurons, 0)
       weights_before_relu[i][0] = d(gen);
       weights_before_relu[i][1] = d(gen);
       weights_before_relu[i][2] = d(gen);
+      weights_before_relu[i][3] = d(gen);
       weights_after_relu[i] = d(gen);
     }
 }
@@ -96,10 +97,11 @@ void Dot::move(float timeStep, std::vector<Obstacle>& walls )
     //Move the dot up or down
 
     mVelY += gravity*timeStep;
-    auto diff = dif(walls);
-    int diff_x = diff.first;
-    int diff_y = diff.second;
-    if (decision_making(diff_x, diff_y)) {
+    std::vector<int> diff = dif(walls);
+    int diff_x = diff[0];
+    int diff_y = diff[1];
+    int direction = -1 + 2*(diff[2]);
+    if (decision_making(diff_x, diff_y, direction)) {
       // std::cout << "I WANNA JUMP" << "\n";
       mVelY = -200;
     }
@@ -161,20 +163,24 @@ int ReLU(double x) {
   return std::max(x, 0.0);
 }
 
-std::pair<int, int> Dot::dif (const std::vector<Obstacle>& walls) { 
+std::vector<int> Dot::dif (const std::vector<Obstacle>& walls) { 
   auto it = walls.end();
+  std::vector<int> result;
   for (auto first = walls.begin(); first != walls.end(); ++first) {
     if (first->top.x+first->top.w >= mPosX && (it==walls.end() || first->top.x+first->top.w < it->top.x + it->top.w)) {
       it = first;
     }
   }
-  return {mPosX - it->top.x, mPosY - it->center};
+  result.push_back(mPosX - it->top.x);
+  result.push_back(mPosY - it->center);
+  result.push_back(it->GoingUp());
+  return result;
 }
 
-bool Dot::decision_making (const int diff_x, const int diff_y) { 
+bool Dot::decision_making (const int diff_x, const int diff_y, const int direction) { 
   double f = 0.0;
   for (int i = 0; i < number_of_neurons; ++i) {
-    auxiliary_matrix[i] = ReLU(weights_before_relu[i][0] * mVelY + weights_before_relu[i][1]*diff_x + weights_before_relu[i][2]*diff_y);
+    auxiliary_matrix[i] = ReLU(weights_before_relu[i][0] * mVelY + weights_before_relu[i][1]*diff_x + weights_before_relu[i][2]*diff_y + weights_before_relu[i][3]*direction);
   }
   for (int i = 0; i < number_of_neurons; ++i) {
     f += weights_after_relu[i] * auxiliary_matrix[i];
@@ -194,6 +200,7 @@ void Enfants(std::vector<Dot>& birds) {
       birds[i].weights_before_relu[j][0] = d(gen) * birds[0].weights_before_relu[j][0];
       birds[i].weights_before_relu[j][1] = d(gen) * birds[0].weights_before_relu[j][1];
       birds[i].weights_before_relu[j][2] = d(gen) * birds[0].weights_before_relu[j][2];
+      birds[i].weights_before_relu[j][3] = d(gen) * birds[0].weights_before_relu[j][3];
       birds[i].weights_after_relu[j] = d(gen) * birds[0].weights_after_relu[j];
     }
   }
@@ -202,6 +209,7 @@ void Enfants(std::vector<Dot>& birds) {
       birds[i].weights_before_relu[j][0] = d(gen) * birds[1].weights_before_relu[j][0];
       birds[i].weights_before_relu[j][1] = d(gen) * birds[1].weights_before_relu[j][1];
       birds[i].weights_before_relu[j][2] = d(gen) * birds[1].weights_before_relu[j][2];
+      birds[i].weights_before_relu[j][3] = d(gen) * birds[1].weights_before_relu[j][3];
       birds[i].weights_after_relu[j] = d(gen) * birds[1].weights_after_relu[j];
     }
   }
