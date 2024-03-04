@@ -40,7 +40,7 @@ class Dot {
 
   int length_path = 0;
 
-  int number_of_neurons = 4;
+  int number_of_neurons = 6;
 
   std::vector<std::vector<double> > weights_before_relu;
 
@@ -48,9 +48,9 @@ class Dot {
 
   std::vector<double> auxiliary_matrix;
 
-  std::pair<int, int> dif(const std::vector<Obstacle>& walls);
+  std::vector<int> dif(const std::vector<Obstacle>& walls);
 
-  bool decision_making(const int diff_x, const int diff_y);
+  bool decision_making(const int diff_x, const int diff_y, const int direction);
 
  private:
   // The X and Y offsets of the dot

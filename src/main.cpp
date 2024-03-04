@@ -180,7 +180,7 @@ int main(int argc, char* args[]) {
 
       SDL_Event e;
 
-      std::vector<Dot> birds(20);
+      std::vector<Dot> birds(1000);
       LTimer stepTimer;
       std::vector<Obstacle> walls;
       Obstacle a(300, 300, 300, 300);
@@ -196,9 +196,9 @@ int main(int argc, char* args[]) {
             quit = true;
           }
 
-          if (e.key.keysym.sym == SDLK_r) {
-            Restart(birds, walls);
-          }
+          // if (e.key.keysym.sym == SDLK_r) {
+          //   Restart(birds, walls);
+          // }
           // Handle input for the dot
           // if (!dot.end_game) {
           //   dot.handleEvent( e );
