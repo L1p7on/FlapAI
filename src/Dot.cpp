@@ -14,6 +14,9 @@ Dot::Dot()
   // Initialize the velocity
   mVelX = 0.0;
   mVelY = 0.0;
+
+  // weights_before_relu = decltype(weights_before_relu)(number_of_neurons, std::vector<double>(3, 0.0));
+
   std::random_device rd;
   std::mt19937 gen(rd());
   std::normal_distribution<double> d;
