@@ -14,6 +14,7 @@ Dot::Dot()
   // Initialize the velocity
   mVelX = 0.0;
   mVelY = 0.0;
+
   std::random_device rd;
   std::mt19937 gen(rd());
   std::normal_distribution<double> d;
